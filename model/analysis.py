@@ -13,7 +13,7 @@ class Analysis:
     def __init__(self):
         # load dataset with some values as NaN if they match the value inside the dict
         self.df: pd.DataFrame = \
-            pd.read_csv(os.path.join(os.path.dirname(os.getcwd()), 'data\\adult.csv'),
+            pd.read_csv(os.path.join(os.getcwd(), 'data\\adult.csv'),
                 na_values={
                     'workclass': '?',
                     'occupation': '?',
