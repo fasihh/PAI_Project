@@ -48,6 +48,17 @@ class Analysis:
             self.label_encoders[feature] = le
         return df_encoded
     
+    def __get_safe_feature_names(self, features: list[str]) -> list[str]:
+        def format(title: str) -> str:
+            return title.replace('.', '_')
+        return list(map(format, features))
+    
+    def get_safe_feature_names_numeric(self) -> list[str]:
+        return self.__get_safe_feature_names(self.numeric)
+    
+    def get_safe_feature_names_nonnumeric(self) -> list[str]:
+        return self.__get_safe_feature_names(self.nonnumeric)
+    
     def apply_knn(self, k: int = 5, target: str = 'income') -> None:
         """
         Apply KNN over the features and store all results for later use
@@ -70,7 +81,7 @@ class Analysis:
         self.y_prob = self.knn.predict_proba(self.X_test)[:, 1]
 
     def __formattitle(self, title: str) -> str:
-        return title.replace('.', ' ').capitalize()
+        return title.replace('.', ' ').title()
 
     def __tobuffer(self) -> BytesIO:
         """
@@ -112,7 +123,7 @@ class Analysis:
             sns.countplot(x=self.df[feature], order=self.df[feature].value_counts().index)
             plt.title(f'{self.__formattitle(feature)} Distribution')
             plt.xticks(rotation=90)
-            plots[feature] = self.__tobuffer()
+            plots[feature.replace('.', '_')] = self.__tobuffer()
         return plots
     
     def histplots(self, remove_zeros: bool = True) -> dict[str, BytesIO]:
@@ -127,7 +138,7 @@ class Analysis:
 
             sns.histplot(data=feature_data, x=feature, kde=True, edgecolor=None, bins=15)
             plt.title(f'{self.__formattitle(feature)} Distribution')
-            plots[feature] = self.__tobuffer()
+            plots[feature.replace('.', '_')] = self.__tobuffer()
         return plots
     
     def boxplots(self, remove_zeros: bool = True) -> dict[str, BytesIO]:
@@ -142,7 +153,7 @@ class Analysis:
 
             sns.boxplot(data=feature_data, x=feature)
             plt.title(f'{self.__formattitle(feature)}')
-            plots[feature] = self.__tobuffer()
+            plots[feature.replace('.', '_')] = self.__tobuffer()
         return plots
     
     def splitfeature_countplots(self) -> dict[str, BytesIO]:
@@ -153,7 +164,7 @@ class Analysis:
         for feature in self.nonnumeric:
             sns.countplot(data=self.df, x=feature, hue='income')
             plt.xticks(rotation=90)
-            plots[feature] = self.__tobuffer()
+            plots[feature.replace('.', '_')] = self.__tobuffer()
         return plots
     
     def knn_confusion_matrix(self) -> BytesIO:
