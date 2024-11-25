@@ -1,7 +1,11 @@
+import matplotlib
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse, JSONResponse
 from model.analysis import Analysis
 from starlette.requests import Request
+
+# non GUI thread
+matplotlib.use('Agg')
 
 app = FastAPI()
 analaysis = Analysis()
