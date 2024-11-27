@@ -127,5 +127,5 @@ def knn_classification_report(k: int = DEFAULT_K):
     return StreamingResponse(get_image(f'knn_roc_k{k}'), media_type="image/png")
 
 @app.get("/graphs/knn/acc_vs_k")
-def knn_classification_report():
+def knn_acc_vs_k():
     return StreamingResponse(get_image('knn_acc_vsk'), media_type="image/png")
