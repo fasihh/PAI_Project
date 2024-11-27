@@ -25,11 +25,11 @@ pip install -r requirements.txt
 ```bash
 make generate_images
 ```
-Then run the server using:
+   Then run the server using:
 ```bash
 make run_api
 ```
-You can do both using:
+   You can do both using:
 ```bash
 make run
 ```
