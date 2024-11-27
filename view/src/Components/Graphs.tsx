@@ -1,68 +1,41 @@
+import { useEffect, useState } from "react";
 import { SingleLevelDropdownMenu } from "./DropDown";
+import { error } from "console";
+import format_features from '../utils/formatFeatures'
+import { Features } from "../types/global";
+import EdaImage from "./EdaImage";
+import KnnImage from "./KnnImage";
 
 const Graphs = () => {
+    const [features, setFeatures] = useState<Features>({"numeric": [], "nonnumeric": []});
+    const knnValues: string[] = Array.from({ length: 10 }, (_, i) => String(i + 1));
+
+    useEffect(() => {
+        (async() => {
+            const res = await fetch(`${process.env.REACT_APP_API}/data/features`);
+            setFeatures(await res.json() as Features) 
+        })().catch(console.error);
+    },[])
+
     return ( 
-        <div className="flex items-center justify-center bg-slate-500 py-7">
-            <div className="bg-gray-200 flex">
-                <div className="h-[1000px] w-[300px] bg-slate-950">
-                    {/* Dashboard Div */}
-                </div>
+        <div className="flex items-center justify-center py-7 bg-[url('srcImages/background.png')]">
+            <div className="bg-[#FAFAFA] flex">  
                 <div className="flex flex-col my-4">
                     <div className="flex mb-6">
-                        <div className=" relative w-[400px] max-w-[500px] max-h-[500px] mx-6">
-                            <img src="/images/countplots_workclass.png" className="rounded-xl" />
-                            <div className="absolute top-0">
-                                <SingleLevelDropdownMenu 
-                                    buttonLabel="Work Class"
-                                    items={[{title: "Education"}, {title: "Martial Status"}]}
-                                />
-                            </div>
-                        </div>
-                        <div className="relative w-[400px] max-w-[500px] max-h-[500px] mx-6">
-                            <img src="/images/histplots_age.png" className="rounded-xl h-[378px]" />
-                            <div className="absolute top-0">
-                                <SingleLevelDropdownMenu 
-                                    buttonLabel="Work Class"
-                                    items={[{title: "Education"}, {title: "Martial Status"}]}
-                                />
-                            </div>
-                        </div>
+                        <EdaImage features={features.nonnumeric} graphType="countplots" graphTitle="workclass" />
+                        <EdaImage features={features.nonnumeric} graphType="splitplots" graphTitle="workclass" />
                     </div>
                     <div className="flex mb-6">
-                        <div className="w-[400px] max-w-[500px] max-h-[500px] mx-6"><img src="/images/boxplots_age.png" className="rounded-xl" /></div>
-                        <div className="w-[400px] max-w-[500px] max-h-[350px] mx-6"><img src="/images/splits_countplots_workclass.png" className="rounded-xl h-[350px] w-[480px]" /></div>
+                        <EdaImage features={features.numeric} graphType="boxplots" graphTitle="age" />
+                        <EdaImage features={features.numeric} graphType="histplots" graphTitle="education_num" />
                     </div>
-                    <div className="w-[400px] max-w-[500px] max-h-[500px] mx-6"><img src="/images/heatmap_heatmap.png" className="rounded-xl" /></div>
-                    <div className="flex flex-col">
-                        
-                        {/* <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/countplots_education.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/countplots_marital_status.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/countplots_occupation.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/countplots_relationship.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/countplots_race.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/countplots_sex.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/countplots_native_country.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/countplots_income.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/histplots_education_num.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/histplots_capital_gain.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/histplots_capital_loss.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/histplots_hours_per_week.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/boxplots_education_num.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/boxplots_capital_gain.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/boxplots_capital_loss.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/boxplots_hours_per_week.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/splits_countplots_education.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/splits_countplots_marital_status.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/splits_countplots_occupation.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/splits_countplots_relationship.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/splits_countplots_race.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/splits_countplots_sex.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/splits_countplots_native_country.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/splits_countplots_income.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/confusion_confusion.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/classification_classification.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/roc_roc.png" className="rounded-xl" /></div>
-                        <div className="max-w-[500px] max-h-[500px] mx-6"><img src="/images/vsk_vsk.png" className="rounded-xl" /></div> */}
+                    <div className="flex mb-6">
+                        <KnnImage features={knnValues} graphTitle="confusion" />
+                        <KnnImage features={knnValues} graphTitle="classification" />
+                    </div>
+                    <div className="flex mb-6">
+                        <KnnImage features={knnValues} graphTitle="roc" />
+                        <KnnImage features={knnValues} graphTitle="acc_vs_k" />
                     </div>
                 </div>
             </div>

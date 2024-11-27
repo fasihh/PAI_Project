@@ -1,29 +1,43 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import format_feature from "../utils/formatFeatures";
 
 interface SingleLevelDropdownMenuProps {
   buttonLabel: string;
-  items: {
-    title: string;
-    url?: string;
-    icon?: JSX.Element;
-    action?: () => void;
-  }[];
+  titles: string[];
+  setTitle: (title: string) => void;
 }
 
 export const SingleLevelDropdownMenu = ({
   buttonLabel,
-  items,
+  titles,
+  setTitle,
 }: SingleLevelDropdownMenuProps) => {
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
   const handleToggle = () => {
     setOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         type="button"
-        className="inline-flex items-center justify-center rounded-md text-sm border border-[#e4e4e7] h-10 px-4 py-2"
+        className="inline-flex items-center justify-center rounded-md text-[10px] pl-[6px]"
         onClick={handleToggle}
       >
         {buttonLabel}
@@ -32,14 +46,18 @@ export const SingleLevelDropdownMenu = ({
         </span>
       </button>
       {open && (
-        <div className="absolute left-1/2 -translate-x-[32%] top-10">
-          <ul className="w-48 h-auto shadow-md rounded-md p-1 border bg-white">
-            {items.map((item, index) => (
+        <div className="absolute left-[57px] -translate-x-[32%] top-6">
+          <ul className="w-48 max-h-48 overflow-y-auto shadow-md rounded-md p-1 border bg-white">
+            {titles.map((title, index) => (
               <li
                 key={index}
-                className={`relative flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 rounded-md`}
+                className="relative flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 rounded-md"
+                onClick={() => {
+                  setTitle(title);
+                  setOpen(false);
+                }}
               >
-                {item.title}
+                {format_feature(title)}
               </li>
             ))}
           </ul>
