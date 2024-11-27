@@ -11,12 +11,12 @@ const KnnGraphs = () => {
             <div className="bg-[#FAFAFA] flex">  
                 <div className="flex flex-col justify-between h-[90%] py-4 bg-orange-50">
                     <div className="flex justify-between w-full mb-4">
-                        <KnnImage features={knnValues} graphTitle="confusion" />
-                        <KnnImage features={knnValues} graphTitle="classification" />
+                        <KnnImage features={knnValues} graphTitle="confusion" available />
+                        <KnnImage features={knnValues} graphTitle="classification" available />
                     </div>
                     <div className="flex justify-between w-full">
-                        <KnnImage features={knnValues} graphTitle="roc" />
-                        <KnnImage features={knnValues} graphTitle="acc_vs_k" />
+                        <KnnImage features={knnValues} graphTitle="roc" available />
+                        <KnnImage features={knnValues} graphTitle="acc_vs_k" available={false} />
                     </div>
                 </div>
             </div>

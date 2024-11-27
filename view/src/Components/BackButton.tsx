@@ -6,7 +6,7 @@ const BackButton = () => {
   return (
     <div className="absolute top-2 left-2 ">
         <button
-        onClick={() => history.goBack()}
+        onClick={() => history.push('/')}
         className="flex justify-center items-center text-gray-900 p-3 rounded-full shadow-md hover:bg-gray-300 focus:outline-none"
         >
         <svg
