@@ -21,20 +21,20 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-5. To start the server, you must first generate all the images:
+5. Make a separate `.env` file from `.env.example`.
+
+6. To start the server, you must first generate all the images:
 ```bash
 make generate_images
-```
-   Then run the server using:
-```bash
+
+# Then run the server using
 make run_api
-```
-   You can do both using:
-```bash
+
+# You can do both using
 make run
 ```
 
-6. To deactivate virtual environment
+7. To deactivate virtual environment
 ```bash
 deactivate
 ```
