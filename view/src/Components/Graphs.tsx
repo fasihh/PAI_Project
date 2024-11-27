@@ -1,3 +1,5 @@
+import { SingleLevelDropdownMenu } from "./DropDown";
+
 const Graphs = () => {
     return ( 
         <div className="flex items-center justify-center bg-slate-500 py-7">
@@ -7,8 +9,24 @@ const Graphs = () => {
                 </div>
                 <div className="flex flex-col my-4">
                     <div className="flex mb-6">
-                        <div className="w-[400px] max-w-[500px] max-h-[500px] mx-6"><img src="/images/countplots_workclass.png" className="rounded-xl" /></div>
-                        <div className="w-[480px] max-w-[500px] max-h-[500px] mx-6"><img src="/images/histplots_age.png" className="rounded-xl" /></div>
+                        <div className=" relative w-[400px] max-w-[500px] max-h-[500px] mx-6">
+                            <img src="/images/countplots_workclass.png" className="rounded-xl" />
+                            <div className="absolute top-0">
+                                <SingleLevelDropdownMenu 
+                                    buttonLabel="Work Class"
+                                    items={[{title: "Education"}, {title: "Martial Status"}]}
+                                />
+                            </div>
+                        </div>
+                        <div className="relative w-[400px] max-w-[500px] max-h-[500px] mx-6">
+                            <img src="/images/histplots_age.png" className="rounded-xl h-[378px]" />
+                            <div className="absolute top-0">
+                                <SingleLevelDropdownMenu 
+                                    buttonLabel="Work Class"
+                                    items={[{title: "Education"}, {title: "Martial Status"}]}
+                                />
+                            </div>
+                        </div>
                     </div>
                     <div className="flex mb-6">
                         <div className="w-[400px] max-w-[500px] max-h-[500px] mx-6"><img src="/images/boxplots_age.png" className="rounded-xl" /></div>
