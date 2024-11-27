@@ -36,6 +36,8 @@ class Analysis:
         self.y_test: pd.Series | None = None
         self.y_pred: np.ndarray | None = None
         self.y_prob: np.ndarray | None = None
+        
+        sns.set_theme()
 
     def __encode_features(self) -> pd.DataFrame:
         """
