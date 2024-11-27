@@ -29,9 +29,6 @@ make generate_images
 
 # Then run the server using
 make run_api
-
-# You can do both using
-make run
 ```
 
 7. To deactivate virtual environment
