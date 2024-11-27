@@ -1,159 +1,109 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-import pandas as pd
-from fastapi.responses import StreamingResponse, JSONResponse
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import StreamingResponse
 from model.analysis import Analysis
-import shutil
-import os 
+import dotenv
+import os
+
+dotenv.load_dotenv()
+IMAGES_PATH = os.path.join(os.getcwd(), os.getenv('IMAGES') if os.getenv('IMAGES') else 'images')
+MAX_K = int(os.getenv('MAX_K')) if os.getenv('MAX_K') else 10
+DEFAULT_K = int(os.getenv('DEFAULT_K')) if os.getenv('DEFAULT_K') else 5
 
 app = FastAPI()
+analysis = Analysis()
 
-# Initialize the Analysis object
-analysis = Analysis(file_path="file.csv")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Replace "*" with a list of allowed origins for production
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+numeric = analysis.get_safe_feature_names_numeric()
+nonnumeric = analysis.get_safe_feature_names_nonnumeric()
+
+def get_image(image_name: str, file_type: str = 'png'):
+    PATH = os.path.join(IMAGES_PATH, image_name) + f'.{file_type}'
+    print(PATH)
+    if not os.path.exists(PATH):
+        raise HTTPException(status_code=404, detail="Heatmap image does not exist.")
+    return open(PATH, 'rb')
 
 @app.get("/")
-def read_root():
-    analysis.process_file()
-    return {"message": "Welcome to the FastAPI Analysis API"}
+def index():
+    return {
+        "message": "Welcome to the PAI_Project API.",
+        "data_summary": '/data/summary',
+        "features": '/data/features',
+        "list_of_graphs": '/graphs',
+    }
 
-# Route to get cleaned data summary
 @app.get("/data/summary")
 def get_data_summary():
-    summary = {
-        "head": analysis.df.head(5).to_dict(),
-        "description": analysis.df.describe().to_dict(),
+    return {
         "columns": list(analysis.df.columns),
+        "shape": list(analysis.df.shape),
+        "description": analysis.df.describe().to_dict(),
+        "head": analysis.df.head(5).to_dict()
     }
-    return JSONResponse(content=summary)
+
+@app.get("/data/features")
+def get_features():
+    return {
+        "numeric": numeric,
+        "nonnumeric": nonnumeric,
+    }
 
 @app.get("/graphs")
 def list_graphs():
-    graphs = {
-        "heatmap": "/visual/heatmap",
-        "countplots": "/visual/countplots",
-        "boxplots": "/visual/boxplots",
-        "histograms": "/visual/histograms",
-        "split-feature-countplots": "/visual/split-feature-countplots",
-        "knn_confusion_matrix": "/knn/confusion-matrix",
-        "knn_classification_report": "/knn/classification-report",
-        "knn_roc_curve": "/knn/roc-curve",
-        "knn_accuracy_vs_k": "/knn/accuracy-vs-k",
-    }
-    return {"available_graphs": graphs}
-
-
-# Route to get numeric and non-numeric feature names
-@app.get("/features")
-def get_features():
     return {
-        "numeric": analysis.get_safe_feature_names_numeric(),
-        "nonnumeric": analysis.get_safe_feature_names_nonnumeric(),
+        "message": "Visit these routes to get different graphs",
+        "eda": {
+            "numeric_features": {
+                "heatmap": "/graphs/eda/heatmap",
+                "boxplots": "/graphs/eda/boxplots/{feature_name}",
+                "histograms": "/graphs/eda/histograms/{feature_name}",
+            },
+            "nonnumeric_features": {
+                "countplots": "/graphs/eda/countplots/{feature_name}",
+                "split-feature-countplots": "/graphs/eda/split/{feature_name}",
+            }
+        },
+        "knn": {
+            "confusion_matrix": "/graphs/knn/confusion",
+            "classification_report": "/graphs/knn/classification",
+            "roc_curve": "/graphs/knn/roc",
+            "accuracy_vs_k": "/graphs/knn/acc_vs_k",
+        }
     }
 
-# Route to generate and return a heatmap
-@app.get("/visual/heatmap")
-def generate_heatmap():
-    buffer = analysis.heatmap()
-    return StreamingResponse(buffer, media_type="image/png")
+@app.get("/graphs/eda/heatmap")
+def get_heatmap():
+    return StreamingResponse(get_image('heatmap'), media_type="image/png")
 
-# Route to generate and return countplots for categorical features
-@app.get("/visual/countplots")
-def generate_countplots():
-    plots = analysis.countplots()
-    return {feature: f"/visual/plot/{feature}" for feature in plots.keys()}
+@app.get("/graphs/eda/countplots/{feature}")
+def get_countplots(feature: str):
+    if feature not in nonnumeric:
+        raise HTTPException(status_code=404, detail="Feature does not exist")
+    return StreamingResponse(get_image(f'countplots_{feature}'), media_type="image/png")
 
-@app.get("/visual/plot/{feature}")
-def get_feature_plot(feature: str):
-    plots = analysis.countplots()
-    if feature not in plots:
-        raise HTTPException(status_code=404, detail="Plot not found")
-    return StreamingResponse(plots[feature], media_type="image/png")
+@app.get("/graphs/eda/countplots/{feature}")
+def get_histplots(feature: str):
+    if feature not in numeric:
+        raise HTTPException(status_code=404, detail="Feature does not exist")
+    return StreamingResponse(get_image(f'histplots_{feature}'), media_type="image/png")
 
+@app.get("/graphs/knn/confusion")
+def knn_confusion_matrix(k: int = DEFAULT_K):
+    if not (0 < k <= MAX_K):
+        raise HTTPException(status_code=400, detail=f"K out of range. Range=[1, {MAX_K}]")
+    return StreamingResponse(get_image(f'knn_confusion_k{k}'), media_type="image/png")
 
+@app.get("/graphs/knn/classification")
+def knn_classification_report(k: int = DEFAULT_K):
+    if not (0 < k <= MAX_K):
+        raise HTTPException(status_code=400, detail=f"K out of range. Range=[1, {MAX_K}]")
+    return StreamingResponse(get_image(f'knn_classification_k{k}'), media_type="image/png")
 
-# Route to apply KNN and evaluate results
-@app.post("/knn")
-def apply_knn(k: int = 5):
-    try:
-        analysis.apply_knn(k=k)
-        return {"message": f"KNN applied with k={k}"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+@app.get("/graphs/knn/roc")
+def knn_classification_report(k: int = DEFAULT_K):
+    if not (0 < k <= MAX_K):
+        raise HTTPException(status_code=400, detail=f"K out of range. Range=[1, {MAX_K}]")
+    return StreamingResponse(get_image(f'knn_roc_k{k}'), media_type="image/png")
 
-# Route to return confusion matrix
-@app.get("/knn/confusion-matrix")
-def knn_confusion_matrix():
-    try:
-        buffer = analysis.knn_confusion_matrix()
-        return StreamingResponse(buffer, media_type="image/png")
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-# Route to return classification report
-@app.get("/knn/classification-report")
+@app.get("/graphs/knn/acc_vs_k")
 def knn_classification_report():
-    try:
-        buffer = analysis.knn_classification_report()
-        return StreamingResponse(buffer, media_type="image/png")
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-# Route to return ROC curve
-@app.get("/knn/roc-curve")
-def knn_roc_curve():
-    try:
-        buffer = analysis.knn_roc_curve()
-        return StreamingResponse(buffer, media_type="image/png")
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-# Route to return KNN accuracy vs. k
-@app.get("/knn/accuracy-vs-k")
-def knn_accuracy_vs_k(max_k: int = 10):
-    try:
-        buffer = analysis.knn_accuracy_vs_k(max_k=max_k)
-        return StreamingResponse(buffer, media_type="image/png")
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-
-
-@app.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
-    file_location = f"data/{file.filename}"
-    
-    with open(file_location, "wb") as f:
-        shutil.copyfileobj(file.file, f)
-
-    df = pd.read_csv(file.file)
-    analysis.update_dataframe(df)
-
-    return {"info": f"File '{file.filename}' saved at '{file_location}'"}
-
-@app.get("/download/{graph_name}/{file_format}")
-def download_graph(graph_name: str, file_format: str):
-
-    if file_format.lower() not in ["png", "pdf"]:
-        raise HTTPException(status_code=400, detail="Unsupported file format")
-
-    # Generate the requested graph
-    if graph_name == "heatmap":
-        buffer = analysis.heatmap()
-    else:
-        raise HTTPException(status_code=404, detail="Graph not found")
-
-    # Save the graph to a file
-    file_name = f"{graph_name}_output"
-    file_path = analysis.save_graph_to_file(buffer, file_name, file_format)
-
-    # Return the saved file
-    media_type = "application/pdf" if file_format.lower() == "pdf" else "image/png"
-    return FileResponse(file_path, media_type=media_type, filename=f"{file_name}.{file_format}")
+    return StreamingResponse(get_image('knn_acc_vsk'), media_type="image/png")

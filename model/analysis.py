@@ -8,20 +8,12 @@ import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
-import requests
-
-
-url = "http://127.0.0.1:8000/upload-data/"
-file_path = "file.csv"
-
 
 class Analysis:
-    def __init__(self, file_path):
-        self.file_path = file_path
-
+    def __init__(self):
         # load dataset with some values as NaN if they match the value inside the dict
         self.df: pd.DataFrame = \
-            pd.read_csv(os.path.join(os.getcwd(), f'data\\{file_path}'),
+            pd.read_csv(os.path.join(os.getcwd(), f'data\\adult.csv'),
                 na_values={
                     'workclass': '?',
                     'occupation': '?',
@@ -241,63 +233,3 @@ class Analysis:
         plt.ylabel("Accuracy")
         plt.grid()
         return self.__tobuffer()
-    
-    def save_graph_to_file(self, graph_buffer: BytesIO, file_name: str, file_format: str) -> str:
-        """
-        Save a graph to a static directory in the specified format.
-
-        Args:
-            graph_buffer (BytesIO): The graph data as a buffer.
-            file_name (str): Name of the file (without extension).
-            file_format (str): Desired file format (e.g., 'png', 'pdf').
-
-        Returns:
-            str: The path to the saved file.
-        """
-        file_path = f"static/{file_name}.{file_format}"
-        os.makedirs("static", exist_ok=True)
-
-        if file_format.lower() == "pdf":
-            # Save as PDF
-            # plt.figure(figsize=(10, 8))
-            sns.heatmap(self.df[self.numeric].corr(), annot=True)
-            plt.savefig(file_path, format="pdf", bbox_inches="tight")
-        else:
-            # Save as PNG
-            with open(file_path, "wb") as f:
-                f.write(graph_buffer.getvalue())
-
-        return file_path
-    
-    
-    def process_file(self):
-        try:
-            with open(self.file_path, "rb") as f:
-                files = {"file": f}
-                response = requests.post(url, files=files)
-
-                pass
-            print(response.json())
-        except FileNotFoundError:
-            print(f"File not found: {self.file_path}")
-
-
-
-    def update_dataframe(self, df: pd.DataFrame) -> None:
-        """
-        Update the dataframe and refresh all related properties.
-        """
-        self.df = df
-        self.__clean()
-        self.numeric = self.df.select_dtypes(include='number').columns
-        self.nonnumeric = self.df.select_dtypes(exclude='number').columns
-
-
-
-
-
-# with open(file_path, "rb") as f:
-#     files = {"file": f}
-#     response = requests.post(url, files=files)
-
-# print(response.json())
