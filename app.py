@@ -47,7 +47,7 @@ def get_data_summary():
         "columns": list(analysis.df.columns),
         "shape": list(analysis.df.shape),
         "description": analysis.df.describe().to_dict(),
-        "head": analysis.df.head(5).to_dict()
+        "head": analysis.df.head(50).to_dict()
     }
 
 @app.get("/data/features")
