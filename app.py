@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 from model.analysis import Analysis
 import dotenv
 import os
@@ -10,6 +11,15 @@ MAX_K = int(os.getenv('MAX_K')) if os.getenv('MAX_K') else 10
 DEFAULT_K = int(os.getenv('DEFAULT_K')) if os.getenv('DEFAULT_K') else 5
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 analysis = Analysis()
 
 numeric = analysis.get_safe_feature_names_numeric()
