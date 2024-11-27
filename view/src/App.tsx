@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Graphs from "./Components/Graphs";
+import EdaGraphs from "./Components/EdaGraphs";
+import KnnGraphs from "./Components/KnnGraphs";
+import Home from "./Components/Home";
 
 function App() {
   return (
@@ -8,7 +10,13 @@ function App() {
       <Router>
         <Switch>
           <Route exact path='/'>
-            <Graphs />
+            <Home />
+          </Route>
+          <Route exact path='/eda'>
+            <EdaGraphs />
+          </Route>
+          <Route exact path='/knn'>
+            <KnnGraphs />
           </Route>
         </Switch>
       </Router>
