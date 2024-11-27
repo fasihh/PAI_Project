@@ -25,13 +25,23 @@ pip install -r requirements.txt
 
 6. To start the server, you must first generate all the images:
 ```bash
-make generate_images
+py generate_images.py
 
 # Then run the server using
-make run_api
+fastapi dev app.py
 ```
 
-7. To deactivate virtual environment
+7. Open a new terminal. Then run the following command:
+```bash
+npm install
+```
+
+8. To start the front-end:
+```bash
+npm run start
+```
+
+9. To deactivate virtual environment
 ```bash
 deactivate
 ```
