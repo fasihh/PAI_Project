@@ -25,7 +25,7 @@ const EdaImage = ({ features, graphType, graphTitle }: PropType) => {
       </div>
       <img
         src={`${process.env.REACT_APP_API}/graphs/eda/${graphType}/${title}`}
-        className="w-fit h-fit"
+        className="w-full h-full object-contain" // Ensures the image fits within the bounds
         alt="EDA Graph"
       />
     </div>

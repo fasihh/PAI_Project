@@ -14,7 +14,7 @@ const EdaGraphs = () => {
     }, [])
 
     return (
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center mb-4">
             <BackButton />
             <h2 className="text-[40px] mb-4">EDA</h2>
             <div className="bg-[#FAFAFA] flex h-[90%]">
@@ -27,7 +27,6 @@ const EdaGraphs = () => {
                         <EdaImage features={features.numeric} graphType="boxplots" graphTitle="age" />
                         <EdaImage features={features.numeric} graphType="histplots" graphTitle="education_num" />
                     </div>
-
                 </div>
             </div>
         </div>

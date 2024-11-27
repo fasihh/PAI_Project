@@ -6,13 +6,18 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
     const [dataSet, setDataSet] = useState<DataType | undefined>(undefined);
+    const [error, setError] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
+            console.log(process.env.REACT_APP_API);
             const res = await fetch(`${process.env.REACT_APP_API}/data/summary`);
             setDataSet(await res.json() as DataType);
-        })().catch(console.error)
-    })
+        })().catch(error => {
+            console.error(error);
+            setError(true);
+        });
+    }, []);
 
     return (
         <div className="flex flex-col justify-center items-center font-[Roboto]">
@@ -26,7 +31,7 @@ const Home = () => {
                     KNN
                 </Link>
             </div>
-            {!dataSet ? <Loading /> : <DatasetGrid data={dataSet} />}
+            {!dataSet ? error ? <Loading /> : <div>Error</div> : <DatasetGrid data={dataSet} />}
         </div>
     );
 }

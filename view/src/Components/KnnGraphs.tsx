@@ -5,7 +5,7 @@ const KnnGraphs = () => {
     const knnValues: string[] = Array.from({ length: 10 }, (_, i) => String(i + 1));
 
     return ( 
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center mb-4">
             <BackButton />
             <h2 className="text-[40px] mb-4">KNN</h2>
             <div className="bg-[#FAFAFA] flex">  

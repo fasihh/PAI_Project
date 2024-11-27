@@ -37,7 +37,7 @@ export const SingleLevelDropdownMenu = ({
     <div className="relative" ref={dropdownRef}>
       <button
         type="button"
-        className="inline-flex items-center justify-center rounded-md text-[10px] pl-[6px]"
+        className="inline-flex items-center justify-between rounded-sm text-[10px] pl-[6px] w-[100px] shadow-sm transition duration-150 ease-in-out"
         onClick={handleToggle}
       >
         {buttonLabel}
