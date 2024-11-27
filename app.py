@@ -97,13 +97,13 @@ def get_histplots(feature: str):
     return StreamingResponse(get_image(f'histplots_{feature}'), media_type="image/png")
 
 @app.get("/graphs/eda/boxplots/{feature}")
-def get_histplots(feature: str):
+def get_boxplots(feature: str):
     if feature not in numeric:
         raise HTTPException(status_code=404, detail="Feature does not exist")
     return StreamingResponse(get_image(f'boxplots_{feature}'), media_type="image/png")
 
 @app.get("/graphs/eda/splitplots/{feature}")
-def get_histplots(feature: str):
+def get_splitplots(feature: str):
     if feature not in nonnumeric:
         raise HTTPException(status_code=404, detail="Feature does not exist")
     return StreamingResponse(get_image(f'splits_countplots_{feature}'), media_type="image/png")
