@@ -65,11 +65,11 @@ def list_graphs():
             "numeric_features": {
                 "heatmap": "/graphs/eda/heatmap",
                 "boxplots": "/graphs/eda/boxplots/{feature_name}",
-                "histograms": "/graphs/eda/histograms/{feature_name}",
+                "histograms": "/graphs/eda/histplots/{feature_name}",
             },
             "nonnumeric_features": {
                 "countplots": "/graphs/eda/countplots/{feature_name}",
-                "split-feature-countplots": "/graphs/eda/split/{feature_name}",
+                "split_feature_countplots": "/graphs/eda/splitplots/{feature_name}",
             }
         },
         "knn": {
