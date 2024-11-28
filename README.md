@@ -1,5 +1,8 @@
 # PAI_Project: AI-Based Data Analysis and Visualization
 
+#### Click on the link below to follow the steps to set up the project.
+- [Setting Up the Project](#Setting-Up-the-Project)
+
 ## Project Overview
 
 The **PAI_Project** is an AI-based data analysis and visualization tool that aims to provide an interactive and insightful way to explore data through machine learning models, particularly using the K-Nearest Neighbors (KNN) algorithm. This project leverages various libraries and frameworks to clean, process, and visualize data while also providing an intuitive user interface for real-time interaction.
@@ -74,9 +77,7 @@ graph TD;
 ```
 
 
-### How to Use:
 ## Setting Up the Project
-
 1. Clone the repository:
 ```bash
    git clone https://github.com/fasihh/PAI_Project
