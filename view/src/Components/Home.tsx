@@ -21,16 +21,27 @@ const Home = () => {
 
     return (
         <div className="flex flex-col justify-center items-center font-[Roboto]">
-            <h1 className="text-[70px] ">PAI Project</h1>
-            <h2 className="text-[30px]">Adult Census</h2>
-            <div className="flex justify-between w-1/3 text-[20px] mt-6">
-                <Link to='/eda' className="bg-orange-300 w-1/3 border-0 rounded-lg box-border text-gray-900 font-semibold text-sm leading-5 py-3 px-4 text-center no-underline shadow-sm cursor-pointer select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-transparent focus-visible:ring-offset-2 hover:bg-orange-200">
+            <h1 className="text-[60px] font-bold text-gray-800">
+                PAI Project
+            </h1>
+
+
+            <a target='_blank' href='https://www.kaggle.com/datasets/uciml/adult-census-income/data' className="text-[25px] text-gray-500">Adult Census Dataset</a>
+            <div className="flex justify-between w-1/3 text-[20px] mt-6 gap-4">
+                <Link
+                    to="/eda"
+                    className="w-1/2 bg-gradient-to-r from-orange-400 to-orange-300 text-white font-semibold text-sm leading-5 py-3 px-4 rounded-lg shadow-md text-center no-underline hover:from-orange-500 hover:to-orange-300 transition duration-300"
+                >
                     EDA
                 </Link>
-                <Link to='/knn' className="bg-orange-300 w-1/3 border-0 rounded-lg box-border text-gray-900 font-semibold text-sm leading-5 py-3 px-4 text-center no-underline shadow-sm cursor-pointer select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-transparent focus-visible:ring-offset-2 hover:bg-orange-200">
+                <Link
+                    to="/knn"
+                    className="w-1/2 bg-gradient-to-r from-orange-400 to-orange-300 text-white font-semibold text-sm leading-5 py-3 px-4 rounded-lg shadow-md text-center no-underline hover:from-orange-500 hover:to-orange-300 transition duration-300"
+                >
                     KNN
                 </Link>
             </div>
+
             {!dataSet ? error ? <Loading /> : <div>Error</div> : <DatasetGrid data={dataSet} />}
         </div>
     );
