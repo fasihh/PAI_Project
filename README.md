@@ -1,3 +1,62 @@
+
+
+
+
+
+
+
+
+# PAI_Project: AI-Based Data Analysis and Visualization
+
+## Project Overview
+
+The **PAI_Project** is an AI-based data analysis and visualization tool that aims to provide an interactive and insightful way to explore data through machine learning models, particularly using the K-Nearest Neighbors (KNN) algorithm. This project leverages various libraries and frameworks to clean, process, and visualize data while also providing an intuitive user interface for real-time interaction.
+
+The project consists of three main components:
+
+1. **Analysis Module** (`analysis.py`): 
+   - This file encapsulates all the logic related to data processing, machine learning, and visualization.
+   - It cleans the data, applies label encoding, scales features, and applies the KNN algorithm to make predictions.
+   - Various functions generate visual representations such as heatmaps, histograms, box plots, and confusion matrices.
+
+2. **Backend API** (`app.py`): 
+   - A FastAPI-based server that handles routing between the React front end and the `analysis.py` module.
+   - It serves different types of graphs, model evaluations (confusion matrix, classification report, ROC curve), and data insights through RESTful endpoints.
+   - It ensures smooth communication between the model and the user interface, providing images and data summaries dynamically.
+
+3. **Frontend UI** (React):
+   - The React-based user interface allows users to interact with the model, view visualizations, and explore the analysis results.
+   - It makes the data accessible and presents findings through interactive charts and graphs, making complex insights user-friendly and visually engaging.
+
+### Developers:
++----------------------+------------------------+
+| Abdul Rahman Azam    | 23k-0061               |
++----------------------+------------------------+
+| Fasih Hasan          | 23k-0018               |
++----------------------+------------------------+
+| Muhammad Owais       | 23k-0047               |
++----------------------+------------------------+
+
+
+### Key Features:
+
+- **Data Preprocessing & Analysis**: 
+  - Automatically cleans the dataset by handling missing values and outliers.
+  - Encodes categorical variables using LabelEncoder and scales numerical features for better model performance.
+  
+- **KNN Algorithm Implementation**: 
+  - Utilizes K-Nearest Neighbors to predict outcomes based on feature similarities.
+  - Visualizes the model’s performance through accuracy plots, confusion matrices, classification reports, and ROC curves.
+
+- **Dynamic Data Visualization**:
+  - Generates dynamic graphs such as heatmaps, count plots, box plots, and histograms.
+  - Provides insights into the relationships between features and the target variable (income, in this case).
+
+- **Interactive Frontend**:
+  - The React UI allows users to view real-time predictions, graphs, and model insights.
+  - Users can explore different aspects of the data and its predictions through simple navigation.
+
+### How to Use:
 ## Setting Up the Project
 
 1. Clone the repository:
@@ -45,3 +104,4 @@ npm run start
 ```bash
 deactivate
 ```
+
