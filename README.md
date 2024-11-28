@@ -48,6 +48,32 @@ The project consists of three main components:
   - The React UI allows users to view real-time predictions, graphs, and model insights.
   - Users can explore different aspects of the data and its predictions through simple navigation.
 
+# AI Project Flow
+
+This flowchart illustrates the overall flow of the components and their interactions in this project.
+
+```mermaid
+graph TD;
+    A[Start] --> B[Load Dataset];
+    B --> C[Preprocess Data];
+    C --> D[Feature Encoding];
+    D --> E[Apply KNN];
+    E --> F[Generate Evaluation Metrics];
+    F --> G[Generate Visualizations];
+    G --> H[Send Results to API];
+    H --> I[React UI Displays Results];
+    I --> J[End];
+    
+    subgraph FastAPI
+        H
+    end
+    
+    subgraph React Frontend
+        I
+    end
+```
+
+
 ### How to Use:
 ## Setting Up the Project
 
