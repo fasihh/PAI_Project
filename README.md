@@ -109,8 +109,9 @@ py generate_images.py
 fastapi dev app.py
 ```
 
-7. Open a new terminal. Then run the following command:
+7. Open a new terminal. Then run the following commands:
 ```bash
+cd view
 npm install
 ```
 
