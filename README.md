@@ -48,7 +48,7 @@ The project consists of three main components:
   - The React UI allows users to view real-time predictions, graphs, and model insights.
   - Users can explore different aspects of the data and its predictions through simple navigation.
 
-# AI Project Flow
+### AI Project Flow
 
 This flowchart illustrates the overall flow of the components and their interactions in this project.
 
