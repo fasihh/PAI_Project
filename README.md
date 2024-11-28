@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 # PAI_Project: AI-Based Data Analysis and Visualization
 
 ## Project Overview
@@ -28,14 +20,14 @@ The project consists of three main components:
    - The React-based user interface allows users to interact with the model, view visualizations, and explore the analysis results.
    - It makes the data accessible and presents findings through interactive charts and graphs, making complex insights user-friendly and visually engaging.
 
+
 ### Developers:
-+----------------------+------------------------+
-| Abdul Rahman Azam    | 23k-0061               |
-+----------------------+------------------------+
-| Fasih Hasan          | 23k-0018               |
-+----------------------+------------------------+
-| Muhammad Owais       | 23k-0047               |
-+----------------------+------------------------+
+| Developer Name            | ID        |
+| ------------------------- | --------- |
+| **Abdul Rahman Azam**      | 23k-0061  |
+| **Fasih Hasan**            | 23k-0018  |
+| **Muhammad Owais**         | 23k-0047  |
+
 
 
 ### Key Features:
